@@ -1,0 +1,9 @@
+.Login {
+  text-align: center;
+  margin: 0 auto;
+}
+
+.errormsg p {
+  display:inline-block;
+  vertical-align: middle;
+}

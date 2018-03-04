@@ -1,0 +1,7 @@
+.Day {
+  top: 64px;
+  height: 80vh;
+  overflow: scroll;
+  position: relative;
+  display: block;
+}
