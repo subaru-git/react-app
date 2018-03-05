@@ -1,79 +1,30 @@
 const express = require('express')
 const morgan = require('morgan')
-const path = require('path')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const session = require('express-session')
 const mongoose = require('mongoose')
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
+const cors = require('cors')
 const LocalStrategy = require('passport-local').Strategy
-const User = require('../models/user.js')
+const User = require('./models/user.js')
 
 const app = express()
 
-mongoose.connect('mongodb://localhost/User')
-
-// start DB
-// let user = new User()
-// user.id = 'tanaka'
-// user.email = 'tanaka@sample.com'
-// user.name = 'tanaka'
-// user.password = 'password'
-// user.role = 'group1'
-// user.save((err) => {
-//   if (err) { console.log(err) }
-// })
+const mongo = process.env.MONGO_URI || 'mongodb://localhost/closche'
+mongoose.connect(mongo)
 
 app.set('superSecret', 'cat')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
 app.use(session({ secret: 'some salt', resave: true, saveUninitialized: true }))
+require('./passport')(app)
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms'))
-
-app.use(express.static(path.resolve(__dirname, '..', 'build')))
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*')
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-  next()
-})
-
-passport.serializeUser((id, done) => {
-  done(null, id)
-})
-
-passport.deserializeUser((id, done) => {
-  User.findById(id, (error, user) => {
-    if (error) {
-      return done(error)
-    }
-    done(null, user)
-  })
-})
-
-passport.use(new LocalStrategy({
-  usernameField: 'username',
-  passwordField: 'password'
-}, (username, password, done) => {
-  process.nextTick(() => {
-    User.findOne({ name: username }, (error, user) => {
-      if (error) {
-        return done(error)
-      }
-      if (!user) {
-        return done(null, false, { message: 'ユーザーIDを確認してください' })
-      }
-      // if (!user.validPassword(password)) {
-      if (!(user.password === password)) {
-        return done(null, false, { message: 'パスワードが違います' })
-      }
-      return done(null, user)
-    })
-  })
-}))
+app.use(cors())
 
 app.post('/api/login', (req, res, next) => {
   passport.authenticate('local', { session: false }, (err, user, info) => {
