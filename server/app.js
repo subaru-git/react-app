@@ -7,8 +7,8 @@ const mongoose = require('mongoose')
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
 const cors = require('cors')
-const LocalStrategy = require('passport-local').Strategy
 const User = require('./models/user.js')
+const Schedule = require('./models/schedule.js')
 
 const app = express()
 
@@ -71,7 +71,9 @@ app.post('/api/registration', (req, res, next) => {
 })
 
 app.use((req, res, next) => {
+  console.log('token')
   let token = req.body.token || req.query.token || req.header['x-access-token']
+
   if (!token) {
     return res.status(403).json({success: false, message: 'No token provided.'})
   }
@@ -86,6 +88,47 @@ app.use((req, res, next) => {
 
 app.get('/api/list', (req, res, next) => {
   return res.json({success: true, list: ['aaa', 'bbb']})
+})
+
+app.post('/api/schedule', (req, res, next) => {
+  console.log(req.body.schedule)
+  const newSchedule = new Schedule({
+    day: req.body.schedule.day,
+    startTime: req.body.schedule.startTime,
+    endTime: req.body.schedule.endTime,
+    title: req.body.schedule.title,
+    place: req.body.schedule.place,
+    contents: req.body.schedule.contents,
+    member: req.body.schedule.member
+  })
+  newSchedule.save(err => {
+    if (err) {
+      console.log(err)
+      return res.status(403).json({success: false})
+    }
+    return res.json({success: true,
+      scedule: {
+        day: req.body.schedule.day,
+        startTime: req.body.schedule.startTime,
+        endTime: req.body.schedule.endTime,
+        title: req.body.schedule.title,
+        place: req.body.schedule.place,
+        contents: req.body.schedule.contents,
+        member: req.body.schedule.member
+      }
+    })
+  })
+})
+
+app.get('/api/schedule/:member', (req, res, next) => {
+  console.log(req.params.member)
+  Schedule.find({member: req.params.member}, (err, result) => {
+    if (err) console.log(err)
+    console.log(result)
+
+    return res.status(200).json({success: true,
+      schedules: result})
+  })
 })
 
 module.exports = app
