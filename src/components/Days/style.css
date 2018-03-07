@@ -1,0 +1,13 @@
+.Buttons {
+  display: flex;
+  align-items: baseline;
+}
+.Days {
+  display: flex;
+  justify-content: space-between;
+ }
+
+ .Month {
+   margin-left: 10px;
+   color: rgb(74, 86, 97);
+ }

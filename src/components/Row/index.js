@@ -1,17 +1,20 @@
 import React from 'react'
-import { createSelectable } from 'react-selectable'
+import { createSelectable } from 'react-selectable-fast'
 import classNames from 'classnames'
 import './style.css'
 
-const Row = ({ selectableRef, selected, selecting }) => {
+const Row = ({ selectableRef, selected, selecting, saturday, sunday, position }) => {
   const classname = classNames(
     'Row',
     {
       selected,
-      selecting
-    })
+      selecting,
+    },
+    position
+  )
+  
   return (
-    <div className={classname} ref={selectableRef}>aaa</div>
+    <div className={classname} ref={selectableRef}></div>
   )
 }
 

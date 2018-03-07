@@ -1,0 +1,15 @@
+.ScheduleForm {
+}
+
+.Times {
+  display: flex;
+  align-items: baseline;
+}
+
+.Dialog-buttons {
+  text-align: right;
+}
+
+.Date-To {
+  margin: 10px;
+}

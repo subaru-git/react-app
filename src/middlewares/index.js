@@ -56,5 +56,45 @@ export default store => next => action => {
         dispatch(Actions.register.registrationError('ネットワークを確認してください'))
       })
   }
+  if (action.type === Types.SET_SCHEDULE) {
+    console.log(action.payload, ' : ', localStorage.getItem('access_token'))
+    ajax
+      .post('api/schedule', {token: localStorage.getItem('access_token'), schedule: {
+        ...action.payload,
+        member: [
+          localStorage.getItem('userid')
+        ]
+      }})
+      .then( result => {
+        console.log('OK : ', result)
+        if (result.data.success) {
+          dispatch(Actions.schedule.getSchedule({}))
+        } else {
+
+        }
+      })
+      .catch(e => {
+        console.log('NG : ', e)
+      })
+  }
+  if (action.type === Types.GET_SCHEDULE) {
+    console.log(action.payload, ' : ', localStorage.getItem('access_token'))
+    ajax
+      .get(`api/schedule/${localStorage.getItem('userid')}`, { 
+        params: {
+          token: localStorage.getItem('access_token')
+        }
+      })
+      .then( result => {
+        console.log('OK : ', result)
+        if (result.data.success) {
+          dispatch(Actions.schedules.setSchedules(result.data.schedules))
+        } else {
+        }
+      })
+      .catch(e => {
+        console.log('NG : ', e)
+      })
+  }
   next(action)
 }

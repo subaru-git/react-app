@@ -1,17 +1,25 @@
 .Row {
-  background-color: beige;
-  border: dotted 0.5px black;
-  width: 200px;
-  height: 50px;
+  height: 15px;
+  border-left: 0.5px solid rgb(128, 123, 123);
+  border-right: 0.5px solid rgb(128, 123, 123);
 }
+
+.Row.first {
+  border-bottom: 0.5px dotted rgb(128, 123, 123);
+}
+
+.Row.second {
+  border-bottom: 0.5px solid rgb(128, 123, 123);
+}
+
 .in-selection-mode {
   cursor: pointer;
 }
 
 .Row.selected {
-  background: rgb(51, 153, 131);
+  background: rgb(97, 214, 189);
   color: white;
 }
 .Row.selecting {
-  border: 1px solid rebeccapurple;
+  border: 1px solid rgb(62, 224, 170);
 }

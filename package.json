@@ -29,7 +29,7 @@
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^5.0.0-alpha.9",
     "react-scripts": "1.1.0",
-    "react-selectable": "^2.0.1",
+    "react-selectable-fast": "^2.0.10",
     "react-simplemde-editor": "^3.6.11",
     "redux": "^3.7.2",
     "redux-devtools-extension": "^2.13.2",

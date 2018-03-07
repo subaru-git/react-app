@@ -71,9 +71,8 @@ app.post('/api/registration', (req, res, next) => {
 })
 
 app.use((req, res, next) => {
-  console.log('token')
   let token = req.body.token || req.query.token || req.header['x-access-token']
-
+  console.log(token)
   if (!token) {
     return res.status(403).json({success: false, message: 'No token provided.'})
   }

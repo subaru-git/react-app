@@ -1,7 +1,36 @@
 .Day {
   top: 64px;
   height: 80vh;
-  overflow: scroll;
+  margin: 2px;
+  flex-grow: 1;
+}
+
+.Day.saturday {
+  color: #6A6AFF
+}
+
+.Day.sunday {
+  color: #FF6A6B
+}
+
+.main {
   position: relative;
-  display: block;
+  border-top: 0.5px solid rgb(128, 123, 123);
+}
+
+.Plans {
+  position: absolute;
+  display: flex;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.Plan {
+  position: relative;
+  text-align: center;
+  margin-left: 1px;
+  margin-right: 1px;
+  flex-grow: 1;
 }
