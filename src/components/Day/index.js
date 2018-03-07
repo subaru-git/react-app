@@ -81,9 +81,10 @@ class Day extends Component {
       
       const style = {
         top: `${top}px`,
-        height: `${height}px`
+        height: `${height}px`,
+        'background-color': `rgb(241, 221, 207)`
       }
-      plans.push(<Paper className="Plan" key={i} style={style}>{this.props.schedules[i].title}</Paper>)
+      plans.push(<Paper className="Plan" key={i} style={style} zDepth={3}>{this.props.schedules[i].title}</Paper>)
     }
     return (
       <div className={classname}>
