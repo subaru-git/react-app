@@ -1,18 +1,18 @@
-import React, { Component } from 'react'
+import React from 'react'
+import { connect } from 'react-redux'
+import { Route } from 'react-router-dom'
 import Form from '../Form'
-import Days from '../Days'
-import './style.css'
+import WeeklySchedule from '../WeeklySchedule'
+import NotFound from '../NotFound'
 
-class Userpage extends Component {
-  render () {
-    return (
-      <div className="Userpage">
-        <Form title={this.props.match.params.userid}>
-          <Days />
-        </Form>
-      </div>
-    )
-  }
-}
-
-export default Userpage
+export default connect(state =>
+  state.auth
+)(props => (
+  props.userId === props.match.params.userid ? (
+    <Form title={props.match.params.userid}>
+      <WeeklySchedule />
+    </Form>
+  ) : (
+    <Route path={props.path} component={NotFound} />
+  )
+))

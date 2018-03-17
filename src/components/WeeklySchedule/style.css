@@ -7,6 +7,10 @@
   justify-content: space-between;
  }
 
+ .Days >:first-child {
+  flex-basis: 30px;
+ }
+
  .Month {
    margin-left: 10px;
    color: rgb(74, 86, 97);

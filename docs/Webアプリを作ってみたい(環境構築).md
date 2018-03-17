@@ -1,28 +1,31 @@
-Webアプリを作ってみたい(環境構築)
+# Webアプリを作ってみたい(環境構築)
 
 騙し騙し仕事してきたけど珍しく勉強してみようと思ったので、Webアプリを作ってみる
 
-##環境
+## 環境
+
 macOS 10.13.1 (17B1003)
 
-##やりたいこと
+## やりたいこと
+
 聞いたことあるからReactを触ってみる。
 どんなアプリにするかは決めてない。
 
-# 環境構築していく
+## 環境構築していく
 
 ###node
-- nodebrew
-	- nodeのバージョン管理してくれるやつ。homebrewで入れる
 
-```
+- nodebrew
+  - nodeのバージョン管理してくれるやつ。homebrewで入れる
+
+```bash
 brew install nodebrew
 nodebrew -v
 ```
 
 - node 8.9.3(LTSの新しいやつ)を使う
 
-```
+```bash
 nodebrew ls-remote
 nodebrew install 8.9.3
 nodebrew list
@@ -33,25 +36,25 @@ npm -v
 
 - npmをupdate
 
-```
+```bash
 npm install -g npm
 ```
 
 - yarnを入れる
 
-```
+```bash
 npm install -g yarn
 ```
 
 - reactのテンプレートを作成
 
-```
+```bash
 npx create-react-app sample-app
 ```
 
 - 起動してみる
 
-```
+```bash
 cd sample-app
 yarn start
 ```
@@ -73,7 +76,7 @@ yarn start
 
 - launch.jsonに以下のような構成を追加
 
-```
+```json:launch.json
         {
             "name": "Debug CRA Tests",
             "type": "node",
@@ -93,7 +96,6 @@ yarn start
 
 ```
 
-
 ## lint
 
 セミコロンが嫌いなので、starndardにする。
@@ -110,13 +112,13 @@ create-react-appが何に準拠してるかよくわからない。（airbnb?）
 
 - eslintをかけながら必要なnode_moduleを入れていく
 
-```
+```bash
 ./node_module/.bin/eslint .
 ```
 
 今回必要だったもの
 
-```
+```bash
 yarn add eslint-config-standard
 yarn add eslint-plugin-node
 yarn add eslint-plugin-promise
@@ -126,13 +128,14 @@ yarn add eslint-plugin-standard
 - errorが出力されればOK
 - エラーをとる
 
-```
+```bash
 ./node_module/.bin/eslint --fix .
 ```
+
 これでセミコロンとか文法系のエラーが取れるはず。
 あとは設定の問題
 
-#### 'React' is defined but never used
+### 'React' is defined but never used
 
 Reactを認識してないから出るエラー。
 以下を`.eslintrc`に追加。
@@ -147,7 +150,7 @@ Reactを認識してないから出るエラー。
 
 ```
 
-#### 'App' is defined but never used
+### 'App' is defined but never used
 
 これもReactがらみ。独自タグを認識できていない。
 
@@ -162,22 +165,22 @@ Reactを認識してないから出るエラー。
 
 ```
 
-#### 'it' is not defined
+### 'it' is not defined
 
 jestが認識できていない。
 以下を追加。
 
-```
+```.eslintrc
   "env": {
     "jest": true
   },
 ```
 
-#### 'URL' is not defined と 'fetch' is not defined
+### 'URL' is not defined と 'fetch' is not defined
 
 browser?
 
-```
+```.eslintrc
   "env": {
 +   "browser": true,
     "jest": true
@@ -209,4 +212,3 @@ browser?
 
 - `ESLint`をinstall
 - 設定から`eslint.autoFixOnSave`をtrueにする。
-

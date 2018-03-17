@@ -6,7 +6,8 @@ const initialState = {
   timeEnd: null,
   title: '',
   place: '',
-  contents: ''
+  contents: '',
+  isInitial: false
 }
 
 export default (state = initialState, action) => {
@@ -20,7 +21,8 @@ export default (state = initialState, action) => {
         timeEnd: action.payload.timeEnd,
         title: action.payload.title,
         place: action.payload.place,
-        contents: action.payload.contents
+        contents: action.payload.contents,
+        isInitial: action.payload.isInitial
       }
     case Types.SET_SCHEDULE:
       console.log('reducer SET_SCHEDULE', action.payload)
@@ -30,10 +32,9 @@ export default (state = initialState, action) => {
     case Types.GET_SCHEDULE:
       console.log('reducer GET_SCHEDULE', action.payload)
       return {
-        ...state,
+        ...state
       }
     default:
       return state
   }
 }
-

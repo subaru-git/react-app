@@ -1,14 +1,18 @@
 import Types from '../utils/types'
 
 const initialState = {
-  schedules: [
+  data: [
     {
       day: null,
-      startTime: null,
-      endTime: null,
-      title: '',
-      place: '',
-      contents: ''
+      schedule: [
+        {
+          startTime: null,
+          endTime: null,
+          title: '',
+          place: '',
+          contents: ''
+        }
+      ]
     }
   ]
 }
@@ -16,13 +20,13 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case Types.SET_SCHEDULES:
-      console.log('reducer SET_SCHEDULES', action.payload)
+      let returnState = {...state}
+      returnState.data[action.payload.day] = action.payload.schedules
       return {
         ...state,
-        schedules: action.payload
+        returnState
       }
     default:
       return state
   }
 }
-

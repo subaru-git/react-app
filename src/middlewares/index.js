@@ -1,7 +1,6 @@
-import { push, go } from 'react-router-redux'
-
+import { go } from 'react-router-redux'
 import Types from '../utils/types'
-import ajax from '../utils/ajax'
+import api from '../api'
 import Actions from '../actions'
 
 export default store => next => action => {
@@ -11,90 +10,85 @@ export default store => next => action => {
     let params = new URLSearchParams()
     params.append('username', id)
     params.append('password', pass)
-    ajax
-      .post('api/login', params)
-      .then((result) => {
-        console.log('OK : ', result)
-        if (result.data.status === 'OK') {
+
+    ;(async () => {
+      try {
+        const result = await api.login.post(params)
+        if (result.success) {
           dispatch(Actions.auth.setAuth({
-            token: result.data.token,
+            token: result.token,
             id
           }))
-          dispatch(push(id))
+          dispatch(go(id))
         } else {
-          dispatch(Actions.login.authError(result.data.message))
+          dispatch(Actions.login.authError(result.message))
         }
-      })
-      .catch((e) => {
-        console.log('NG : ', e)
+      } catch (e) {
         dispatch(Actions.login.authError('ネットワークを確認してください'))
-      })
+      }
+    })()
   }
+
   if (action.type === Types.REGISTER) {
     const { id, mail, pass } = action.payload
     let params = new URLSearchParams()
     params.append('username', id)
     params.append('email', mail)
     params.append('password', pass)
-    ajax
-      .post('api/registration', params)
-      .then((result) => {
-        console.log('OK : ', result)
-        if (result.data.status === 'OK') {
+    ;(async () => {
+      try {
+        const result = await api.registration.post(params)
+        if (result.success) {
           dispatch(Actions.auth.setAuth({
-            token: result.data.token,
+            token: result.token,
             id
           }))
-          dispatch(push(id))
           dispatch(go(id))
         } else {
-          dispatch(Actions.register.registrationError(result.data.message))
+          dispatch(Actions.login.authError(result.message))
         }
-      })
-      .catch((e) => {
-        console.log('NG : ', e)
-        dispatch(Actions.register.registrationError('ネットワークを確認してください'))
-      })
+      } catch (e) {
+        dispatch(Actions.login.authError('ネットワークを確認してください'))
+      }
+    })()
   }
   if (action.type === Types.SET_SCHEDULE) {
-    console.log(action.payload, ' : ', localStorage.getItem('access_token'))
-    ajax
-      .post('api/schedule', {token: localStorage.getItem('access_token'), schedule: {
-        ...action.payload,
-        member: [
-          localStorage.getItem('userid')
-        ]
-      }})
-      .then( result => {
-        console.log('OK : ', result)
-        if (result.data.success) {
-          dispatch(Actions.schedule.getSchedule({}))
+    ;(async () => {
+      try {
+        const result = await api.schedule.post({
+          schedule: {
+            ...action.payload,
+            member: [
+              localStorage.getItem('userid')
+            ]
+          }
+        })
+        if (result.success) {
+          dispatch(Actions.schedule.getSchedule({day: action.payload.day}))
         } else {
 
         }
-      })
-      .catch(e => {
-        console.log('NG : ', e)
-      })
+      } catch (e) {
+        console.log('SET_SCHEDULE error : ', e)
+      }
+    })()
   }
+
   if (action.type === Types.GET_SCHEDULE) {
-    console.log(action.payload, ' : ', localStorage.getItem('access_token'))
-    ajax
-      .get(`api/schedule/${localStorage.getItem('userid')}`, { 
-        params: {
-          token: localStorage.getItem('access_token')
-        }
-      })
-      .then( result => {
-        console.log('OK : ', result)
-        if (result.data.success) {
-          dispatch(Actions.schedules.setSchedules(result.data.schedules))
+    // 前回の残りで描画されないように消す。ちらつくけど。
+    dispatch(Actions.schedules.setSchedules({day: action.payload.day, schedules: []}))
+    ;(async () => {
+      try {
+        const result = await api.schedule.get(`/${localStorage.getItem('userid')}?day=${action.payload.day}`)
+        if (result.success) {
+          dispatch(Actions.schedules.setSchedules({day: action.payload.day, schedules: result.schedules}))
         } else {
+
         }
-      })
-      .catch(e => {
-        console.log('NG : ', e)
-      })
+      } catch (e) {
+        console.log('GET_SCHEDULE error : ', e)
+      }
+    })()
   }
   next(action)
 }

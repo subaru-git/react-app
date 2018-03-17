@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import DatePicker from 'material-ui/DatePicker'
 import TimePicker from 'material-ui/TimePicker'
@@ -7,105 +7,108 @@ import FlatButton from 'material-ui/FlatButton'
 import Actions from '../../actions/schedule'
 import './style.css'
 
-class ScheduleForm extends Component {
-  handleDateChange(e, date) {
-    console.log(date);
-    const timeStart = new Date(this.props.timeStart)
+export default connect (state => (
+  state.schedule
+), dispatch => (
+  {
+    setRegisterSchedule: payload => { dispatch(Actions.setRegisterSchedule(payload)) },
+    setSchedule: payload => { dispatch(Actions.setSchedule(payload)) }
+  }
+))(props => {
+  const handleDateChange = (e, date) => {
+    const timeStart = new Date(props.timeStart)
     timeStart.setFullYear(date.getFullYear())
     timeStart.setMonth(date.getMonth())
     timeStart.setDate(date.getDate())
-    const timeEnd = new Date(this.props.timeEnd)
+    const timeEnd = new Date(props.timeEnd)
     timeEnd.setFullYear(date.getFullYear())
     timeEnd.setMonth(date.getMonth())
     timeEnd.setDate(date.getDate())
-    this.props.setRegisterSchedule({
-      ...this.props,
+    props.setRegisterSchedule({
+      ...props,
       day: date,
       timeStart,
       timeEnd
     })
   }
 
-  handleStartTimeChange(e, date) {
-    console.log(date)
-    const timeStart = new Date(this.props.day)
+  const handleStartTimeChange = (e, date) => {
+    const timeStart = new Date(props.day)
     timeStart.setHours(date.getHours())
     timeStart.setMinutes(date.getMinutes())
-    this.props.setRegisterSchedule({
-      ...this.props,
+    props.setRegisterSchedule({
+      ...props,
       timeStart
     })
   }
 
-  handleEndTimeChange(e, date) {
-    console.log(date)
-    const timeEnd = new Date(this.props.day)
+  const handleEndTimeChange = (e, date) => {
+    const timeEnd = new Date(props.day)
     timeEnd.setHours(date.getHours())
     timeEnd.setMinutes(date.getMinutes())
-    this.props.setRegisterSchedule({
-      ...this.props,
+    props.setRegisterSchedule({
+      ...props,
       timeEnd
     })
   }
 
-  handleTitleChange(e, title) {
-    this.props.setRegisterSchedule({
-      ...this.props,
+  const handleTitleChange = (e, title) => {
+    props.setRegisterSchedule({
+      ...props,
       title
     })
   }
 
-  handlePlaceChange(e, place) {
-    this.props.setRegisterSchedule({
-      ...this.props,
+  const handlePlaceChange = (e, place) => {
+    props.setRegisterSchedule({
+      ...props,
       place
     })
   }
 
-  handleContentsChange(e, contents) {
-    this.props.setRegisterSchedule({
-      ...this.props,
+  const handleContentsChange = (e, contents) => {
+    props.setRegisterSchedule({
+      ...props,
       contents
     })
   }
 
-  handleSubmit(e) {
+  const handleSubmit = e => {
     e.preventDefault()
-    const { day, timeStart, timeEnd, title, place, contents } = this.props
-    this.props.setSchedule({ day, startTime: timeStart, endTime: timeEnd, title, place, contents })
-    this.props.cancelAction()
+    const { day, timeStart, timeEnd, title, place, contents } = props
+    props.setSchedule({ day, startTime: timeStart, endTime: timeEnd, title, place, contents })
+    props.cancelAction()
   }
 
-  render () {
-    return (
-      <div className="ScheduleForm">
-        <DatePicker hintText="Date" mode="landscape" autoOk value={this.props.day} onChange={this.handleDateChange.bind(this)} minDate={new Date()}/><br />
-        <div className="Times">
-          <TimePicker textFieldStyle={{width: '70px'}} format="24hr" hintText="start" minutesStep={30} value={this.props.timeStart} onChange={this.handleStartTimeChange.bind(this)}/>
-          <div className="Date-To">to</div>
-          <TimePicker textFieldStyle={{width: '70px'}} format="24hr" hintText="end" minutesStep={30} value={this.props.timeEnd}  onChange={this.handleEndTimeChange.bind(this)}/>
-        </div><br />
-        <TextField floatingLabelText="Title" onChange={this.handleTitleChange.bind(this)}/><br />
-        <TextField floatingLabelText="Place" onChange={this.handlePlaceChange.bind(this)}/><br />
-        <TextField floatingLabelText="Contents" multiLine fullWidth rows={5} onChange={this.handleContentsChange.bind(this)}/><br />
-        <div className="Dialog-buttons">
-          <FlatButton label="Submit" primary onClick={this.handleSubmit.bind(this)}/>
-          <FlatButton label="Cancel" onClick={this.props.cancelAction}/>
-        </div>
+  const handleUpdate = e => {
+
+  }
+
+  return (
+    <div className="ScheduleForm">
+      <DatePicker hintText="Date" mode="landscape" autoOk value={props.day} onChange={(e, date) => handleDateChange(e, date)} minDate={new Date()}/><br />
+      <div className="Times">
+        <TimePicker textFieldStyle={{width: '70px'}} format="24hr" hintText="start" minutesStep={30} value={props.timeStart} onChange={(e, date) => handleStartTimeChange(e, date)}/>
+        <div className="Date-To">to</div>
+        <TimePicker textFieldStyle={{width: '70px'}} format="24hr" hintText="end" minutesStep={30} value={props.timeEnd} onChange={(e, date) => handleEndTimeChange(e, date)}/>
+      </div><br />
+      <TextField floatingLabelText="Title" onChange={(e, title) => handleTitleChange(e, title)} value={props.title}/><br />
+      <TextField floatingLabelText="Place" onChange={(e, place) => handlePlaceChange(e, place)} value={props.place}/><br />
+      <TextField floatingLabelText="Contents" multiLine fullWidth rows={5} onChange={(e, contents) => handleContentsChange(e, contents)} value={props.contents}/><br />
+      <div className="Dialog-buttons">
+        {props.isInitial ? (
+          <Fragment>
+            <FlatButton label="Submit" primary onClick={e => handleSubmit(e)}/>
+            <FlatButton label="Cancel" onClick={e => props.cancelAction(e)}/>
+          </Fragment>
+        ) : (
+          <Fragment>
+            <FlatButton label="Update" primary onClick={e => handleUpdate(e)}/>
+            <FlatButton label="Delete" secondary onClick={e => handleUpdate(e)}/>
+            <FlatButton label="Cancel" onClick={e => props.cancelAction(e)}/>
+          </Fragment>
+        )}
       </div>
-    )
-  }
-}
-
-const mapStateToProps = (state) => {
-  return state.schedule
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setRegisterSchedule: payload => { dispatch(Actions.setRegisterSchedule(payload)) },
-    setSchedule: payload => { dispatch(Actions.setSchedule(payload))}
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ScheduleForm)
+    </div>
+  )
+})

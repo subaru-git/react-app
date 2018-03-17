@@ -3,6 +3,8 @@
   height: 80vh;
   margin: 2px;
   flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 150px;
 }
 
 .Day.saturday {
@@ -27,12 +29,4 @@
   bottom: 0;
   margin-left: 3%;
   margin-Right: 3%;
-}
-
-.Plan {
-  position: relative;
-  text-align: center;
-  margin-left: 1px;
-  margin-right: 1px;
-  flex-grow: 1;
 }

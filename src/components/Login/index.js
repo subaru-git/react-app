@@ -1,75 +1,66 @@
-import React, { Component } from 'react'
-import { Redirect, withRouter, Link } from 'react-router-dom'
+import React from 'react'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import Logins from '../../actions/login'
-import Auths from '../../actions/auth'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
-import './style.css'
+import Logins from '../../actions/login'
+import Auths from '../../actions/auth'
 import error from './error.svg'
+import './style.css'
 
-class Login extends Component {
-  onLogin (e) {
-    e.preventDefault()
-    this.props.idError(null)
-    this.props.passwordError(null)
-    this.props.authError(null)
-
-    const id = this.refs.id.getValue()
-    const pass = this.refs.pass.getValue()
-
-    if (!id) {
-      this.props.idError('ユーザーIDは必須です')
-    }
-    if (!pass) {
-      this.props.passwordError('パスワードは必須です')
-    }
-    if (id && pass) {
-      this.props.getAuth({id, pass})
-    }
-  }
-
-  render () {
-    let errormsg = null
-    if (this.props.login.authErrorMessage) {
-      errormsg = (
-        <div className="errormsg">
-          <img src={error} alt="error" /><br />
-          {this.props.login.authErrorMessage}
-        </div>
-      )
-    }
-    return (
-      this.props.auth.access_token ? (
-        <Redirect to={this.props.auth.userId} />
-      ) : (
-        <div className="Login">
-          <h1>Login</h1>
-          <TextField type="text" ref="id" hintText="userID" errorText={this.props.login.idErrorMessage} /><br />
-          <TextField type="password" ref="pass" hintText="password" errorText={this.props.login.passwordErrorMessage} /><br />
-          <RaisedButton onClick={this.onLogin.bind(this)} label="Submit"/><br />
-          <Link to="/registration">create user</Link><br />
-          {errormsg}
-        </div>
-      )
-    )
-  }
-}
-
-const mapStateToProps = (state) => {
-  return {
+export default connect(state => (
+  {
     auth: state.auth,
     login: state.login
   }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
+), dispatch => (
+  {
     idError: (payload) => { dispatch(Logins.idError(payload)) },
     passwordError: (payload) => { dispatch(Logins.passwordError(payload)) },
     authError: (payload) => { dispatch(Logins.authError(payload)) },
     getAuth: payload => { dispatch(Auths.getAuth(payload)) }
   }
-}
+))(props => {
+  let idElm = null
+  let passElm = null
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login))
+  const onLogin = e =>  {
+    e.preventDefault()
+    props.idError(null)
+    props.passwordError(null)
+    props.authError(null)
+
+    const id = idElm.getValue()
+    const pass = passElm.getValue()
+
+    if (!id) {
+      props.idError('ユーザーIDは必須です')
+    }
+    if (!pass) {
+      props.passwordError('パスワードは必須です')
+    }
+    if (id && pass) {
+      props.getAuth({id, pass})
+    }
+  }
+
+  let errormsg = null
+  if (props.login.authErrorMessage) {
+    errormsg = (
+      <div className="errormsg">
+        <img src={error} alt="error" /><br />
+        {props.login.authErrorMessage}
+      </div>
+    )
+  }
+  return (
+    <div className="Login">
+      <h1>Login</h1>
+      <TextField type="text" ref={el => {idElm = el}} hintText="userID" errorText={props.login.idErrorMessage} /><br />
+      <TextField type="password" ref={el => {passElm = el}} hintText="password" errorText={props.login.passwordErrorMessage} /><br />
+      <RaisedButton onClick={e => onLogin(e)} label="Submit"/><br />
+      <Link to="/registration">create user</Link><br />
+      {errormsg}
+    </div>
+  )
+})

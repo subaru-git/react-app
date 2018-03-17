@@ -1,7 +1,7 @@
-Webアプリを作ってみたい(React-Router)
+# Webアプリを作ってみたい(React-Router)
 
-**書くのをサボっていたので思い出になっている。**
-**ところどころ違うかも。**
+***書くのをサボっていたので思い出になっている。***
+***ところどころ違うかも。***
 
 Reactでルーティングしてみる。
 サーバーのルーティングと一緒？
@@ -15,7 +15,7 @@ SPAなのでサーバー側のルーティングをフロントでやる感じ�
 
 ## やってみる
 
-_BrowserRouter_を使ってやってみる。（HashRouterもある）
+*BrowserRouter*を使ってやってみる。（HashRouterもある）
 
 ```javascript:routes.js
 import React, { Component } from 'react'
@@ -40,10 +40,37 @@ class Routes extends Component {
 
 export default Routes
 ```
+
 とりあえずこんな感じ。
 `<Switch>`で`<Route>`囲むと`<Route>`に指定した_path_にしたがってルーティングしてくれる。
 判定は、上から順番。_path_を指定しないと全てのケースがヒットするので、エラーページとかを用意しているのであれば使える。
 
+## 条件分岐させる
+
+何を作るか決めてないけど、ログインはしたい。
+未ログイン状態で`/about`にアクセスすると、`/login`にリダイレクトされるみたいな。
+
+ということで、ログイン済みか？を判断して`<Route>`を組み替える。
+[ここを参考にする](https://qiita.com/doruji/items/4dbc96554d8ed77aed02)
+
+```jacascript:auth.js
+class Auth extends Component {
+  render () {
+    return (
+      this.props.isAuth ? (
+        <Route children={this.props.children} />
+      ) : (
+        <Redirect to={'/login'} />
+      )
+    )
+  }
+}
+```
+
+`this.props.isAuth`でログイン済みか？を判定する。（react-reduxを使っているのでこんな書き方）
+ログイン済みなら子供(`this.props.children`)を展開しますよ。ログインしていなければ、`/login`にリダイレクトしますよってこと。
+
+完成させるとこんな感じ
 
 ```javascript:routes.js
 import React, { Component } from 'react'
@@ -83,3 +110,24 @@ class Routes extends Component {
 
 export default Routes
 ```
+
+この例だと、`/`の*Top*も*Auth*と同じように分岐している。
+
+```javascript:top.js
+class Top extends Component {
+  render () {
+    return (
+      this.props.userid ? (
+        <Redirect to={this.props.userid}/>
+      ) : (
+        <Redirect to={'/login'} />
+      )
+    )
+  }
+}
+```
+
+ログインしていて*userid*がわかるのであれば`/:userid`にリダイレクトされる。
+ログインしていなければ`/login`にリダイレクトされる。
+
+ログイン前提のWebアプリのTopページって何を用意すればいいの？

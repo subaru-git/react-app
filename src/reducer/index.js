@@ -2,7 +2,7 @@ import auth from './auth'
 import login from './login'
 import register from './register'
 import form from './form'
-import days from './days'
+import weeklyschedule from './weeklyschedule'
 import schedule from './schedule'
 import schedules from './schedules'
 
@@ -11,7 +11,7 @@ export default {
   login,
   register,
   form,
-  days,
+  weeklyschedule,
   schedule,
   schedules
 }

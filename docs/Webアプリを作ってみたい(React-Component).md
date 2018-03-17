@@ -1,4 +1,4 @@
-Webアプリを作ってみたい(React-Component)
+# Webアプリを作ってみたい(React-Component)
 
 Reactをいじる環境ができたので、Componentをいじってみる。
 
@@ -38,7 +38,7 @@ button {
 }
 ```
 
-## 表示するためにAppに追加する
+## 表示するためにAppにBlueButtonを追加する
 
 ```./src/components/App/index.js
 
@@ -78,7 +78,7 @@ button {
 }
 ```
 
-## 表示するためにAppに追加する
+## 表示するためにAppにRedButtonを追加する
 
 ```./src/components/App/index.js
 
@@ -191,8 +191,6 @@ export default Number
 
 テンプレートエンジンであれば、ループが書けるけどReactだとどうするの？ってこと。
 
-(ここまでで、React-Componentはテンプレートエンジンのファイルつくるのめんどくさいから生まれた仕組みだと思っています。)
-
 ```./src/components/Number/index.js
 import React, {Component} from 'react'
 
@@ -243,7 +241,7 @@ _getNumbers()_でlistに`<p>`の要素をpushして返す。
 
 ちなみに、文字として`{}`が使いたいときは、
 
-```
+```jsx
 {` {aaa} `}
 ```
 

@@ -1,4 +1,5 @@
 import Types from '../utils/types'
+import $http from '../utils/http'
 
 const initialState = {
   isAuth: localStorage.getItem('isAuth'),
@@ -14,6 +15,7 @@ export default (state = initialState, action) => {
       localStorage.setItem('isAuth', true)
       localStorage.setItem('access_token', action.payload.token)
       localStorage.setItem('userid', action.payload.id)
+      $http.defaults.headers.common.Authorization = `Bearer ${action.payload.token}`
       return {
         ...state,
         isAuth: true,
@@ -30,6 +32,7 @@ export default (state = initialState, action) => {
         ...state,
         isAuth: false,
         access_token: null,
+        userId: null,
         timestamp: Date.now()
       }
     default :
