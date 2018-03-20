@@ -36,12 +36,9 @@ export default connect(state => (
   }
 
   let days = []
+  const today = new Date()
   for (let i = 0; i < props.displayDays; i++) {
-    const date = new Date()
-    date.setDate(date.getDate() + i + props.displayStartOffset)
-    date.setHours(0)
-    date.setMinutes(0)
-    date.setSeconds(0)
+    const date = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i + props.displayStartOffset)    
     days.push(<Day date={date} key={i}/>)
   }
   const date = new Date()

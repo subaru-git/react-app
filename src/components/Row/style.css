@@ -1,15 +1,17 @@
 .Row {
   height: 15px;
-  border-left: 0.5px solid rgb(128, 123, 123);
-  border-right: 0.5px solid rgb(128, 123, 123);
+  /* border-left: 0.5px solid #BDBDBD;
+  border-right: 0.5px solid #BDBDBD; */
 }
+
+.Row + .Row {
+  border-bottom: thin ridge #BDBDBD;
+
+}
+
 
 .Row.first {
-  border-bottom: 0.5px dotted rgb(128, 123, 123);
-}
-
-.Row.second {
-  border-bottom: 0.5px solid rgb(128, 123, 123);
+  border-bottom: thin dotted #BDBDBD;
 }
 
 .in-selection-mode {
@@ -17,9 +19,9 @@
 }
 
 .Row.selected {
-  background: rgb(97, 214, 189);
+  background: #FDD835;
   color: white;
 }
 .Row.selecting {
-  border: 1px solid rgb(62, 224, 170);
+  border: 1px solid #F9A825;
 }

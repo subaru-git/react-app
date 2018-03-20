@@ -90,5 +90,92 @@ export default store => next => action => {
       }
     })()
   }
+
+  if (action.type === Types.UPDATE_SCHEDULE) {
+    ;(async () => {
+      try {
+        const result = await api.schedule.put({
+          schedule: {
+            ...action.payload,
+            member: [
+              localStorage.getItem('userid')
+            ]
+          }
+        })
+        if (result.success) {
+          dispatch(Actions.schedule.getSchedule({day: action.payload.day}))
+        } else {
+
+        }
+      } catch (e) {
+        console.log('GET_SCHEDULE error : ', e)
+      }
+    })()
+  }
+
+  if (action.type === Types.DELETE_SCHEDULE) {
+    ;(async () => {
+      try {
+        const result = await api.schedule.delete(`/${action.payload.id}`)
+        if (result.success) {
+          dispatch(Actions.schedule.getSchedule({day: action.payload.day}))
+        } else {
+
+        }
+      } catch (e) {
+        console.log('GET_SCHEDULE error : ', e)
+      }
+    })()
+  }
+
+  if (action.type === Types.GET_USER_PROFILE) {
+    ;(async () => {
+      try {
+        const result = await api.user.get(``)
+        if (result.success) {
+          dispatch(Actions.userprofile.setUserProfile(result.profile))
+        } else {
+
+        }
+      } catch (e) {
+        console.log('GET_USER_PROFILE error : ', e)
+      }
+    })()
+  }
+
+  if (action.type === Types.UPDATE) {
+    ;(async () => {
+      try {
+        const result = await api.user.put({
+          id: localStorage.getItem('userid'),
+          email: action.payload.email,
+          password: action.payload.password
+        })
+        if (result.success) {
+          dispatch(Actions.userprofile.getUserProfile({}))
+        } else {
+
+        }
+      } catch (e) {
+        console.log('UPDATE error : ', e)
+      }
+    })()    
+  }
+
+  if (action.type === Types.GET_USER_LIST) {
+    ;(async () => {
+      try {
+        const result = await api.user.get('/list')
+        if (result.success) {
+          dispatch(Actions.userlist.serUserList(result.list))
+        } else {
+
+        }
+      } catch (e) {
+        console.log('UPDATE error : ', e)
+      }
+    })()    
+  }
+  
   next(action)
 }

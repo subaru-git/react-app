@@ -2,27 +2,27 @@ import Types from '../utils/types'
 
 const initialState = {
   day: null,
-  timeStart: null,
-  timeEnd: null,
+  start: null,
+  end: null,
   title: '',
   place: '',
   contents: '',
-  isInitial: false
+  id: ''
 }
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case Types.SET_REGISTER_SCHEDULE:
-      console.log('reducer SET_REGISTER_SCHEDULE: ', action.payload)
+      const {day, start, end, title, place, contents, id} = action.payload
       return {
         ...state,
-        day: action.payload.day,
-        timeStart: action.payload.timeStart,
-        timeEnd: action.payload.timeEnd,
-        title: action.payload.title,
-        place: action.payload.place,
-        contents: action.payload.contents,
-        isInitial: action.payload.isInitial
+        day,
+        start,
+        end,
+        title,
+        place,
+        contents,
+        id
       }
     case Types.SET_SCHEDULE:
       console.log('reducer SET_SCHEDULE', action.payload)

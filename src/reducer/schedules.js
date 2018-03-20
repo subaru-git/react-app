@@ -1,30 +1,20 @@
 import Types from '../utils/types'
 
 const initialState = {
-  data: [
-    {
-      day: null,
-      schedule: [
-        {
-          startTime: null,
-          endTime: null,
-          title: '',
-          place: '',
-          contents: ''
-        }
-      ]
-    }
-  ]
+  data: new Map()
 }
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case Types.SET_SCHEDULES:
-      let returnState = {...state}
-      returnState.data[action.payload.day] = action.payload.schedules
+      let returnData = new Map(state.data)
+      if (returnData.has(action.payload.day.getTime())) {
+        returnData.delete(action.payload.day.getTime())
+      }
+      returnData.set(action.payload.day.getTime(), action.payload.schedules)
       return {
         ...state,
-        returnState
+        data : returnData
       }
     default:
       return state

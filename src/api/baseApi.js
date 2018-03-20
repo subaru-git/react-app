@@ -22,6 +22,11 @@ export default class {
     return promise
   }
 
+  async put (body, path = '') {
+    const promise = await this.ajax({type: 'put', body, path})
+    return promise
+  }
+
   async delete (path) {
     const promise = await this.ajax({type: 'delete', path})
     return promise

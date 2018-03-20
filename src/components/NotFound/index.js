@@ -6,7 +6,7 @@ class NotFound extends Component {
     return (
       <div className="NotFound">
         <h1>404 Page Not Found</h1>
-        <section class="error-container">
+        <section className="error-container">
           <span><span>4</span></span>
           <span>0</span>
           <span><span>4</span></span>

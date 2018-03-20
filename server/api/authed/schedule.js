@@ -1,17 +1,14 @@
 const express = require('express')
 const Schedule = require('../../models/schedule.js')
+const uuid = require('uuid/v4')
 
 const router = express.Router()
 
-router.post('/schedule', (req, res, next) => {
+router.post('/', (req, res, next) => {
+  const {day, start, end, title, place, contents, member} = req.body.schedule
+  const id = uuid()
   const newSchedule = new Schedule({
-    day: req.body.schedule.day,
-    startTime: req.body.schedule.startTime,
-    endTime: req.body.schedule.endTime,
-    title: req.body.schedule.title,
-    place: req.body.schedule.place,
-    contents: req.body.schedule.contents,
-    member: req.body.schedule.member
+    day, start, end, title, place, contents, member, id
   })
   newSchedule.save(err => {
     if (err) {
@@ -20,22 +17,16 @@ router.post('/schedule', (req, res, next) => {
     }
     return res.json({success: true,
       schedule: {
-        day: req.body.schedule.day,
-        startTime: req.body.schedule.startTime,
-        endTime: req.body.schedule.endTime,
-        title: req.body.schedule.title,
-        place: req.body.schedule.place,
-        contents: req.body.schedule.contents,
-        member: req.body.schedule.member
+        day, start, end, title, place, contents, member
       }
     })
   })
 })
 
-router.get('/schedule/:member', (req, res, next) => {
+router.get('/:member', (req, res, next) => {
   let queryDay = new Date(req.query.day)
   queryDay.setTime(queryDay.getTime() + (queryDay.getTimezoneOffset() * 60000))
-  console.log(`member: ${req.params.member} day: ${queryDay}`)
+  console.log(`member: ${req.params.member} day: ${queryDay} time: ${queryDay.getTime()}`)
   const query = { $and: [
     {member: req.params.member},
     {day: queryDay}
@@ -48,4 +39,19 @@ router.get('/schedule/:member', (req, res, next) => {
   })
 })
 
+router.put('/', (req, res, next) => {
+  Schedule.update({id: req.body.schedule.id}, req.body.schedule, {upsert: true}, (err) => {
+    if (err) console.log(err)
+    return res.json({success: true,
+      schedule: req.body.schedule
+    })
+  })
+})
+
+router.delete('/:id', (req, res, next) => {
+  Schedule.remove({id: req.params.id}, (err) => {
+    if (err) console.log(err);
+    return res.json({success: true})
+  })
+})
 module.exports = router

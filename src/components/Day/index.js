@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Dialog from 'material-ui/Dialog'
-import Paper from 'material-ui/Paper'
 import { SelectableGroup } from 'react-selectable-fast'
 import classNames from 'classnames'
 import Hour from '../Hour'
@@ -35,13 +34,13 @@ class Day extends Component {
       selectedItems: keys,
       open: true
     })
-    const timeStart = keys[0].props.selectableKey
-    const timeEnd = keys[keys.length - 1].props.selectableKey + 1
+    const start = keys[0].props.selectableKey
+    const end = keys[keys.length - 1].props.selectableKey + 1
     const { setRegisterSchedule, date } = this.props
     setRegisterSchedule({
       day: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
-      timeStart: new Date(date.getFullYear(), date.getMonth(), date.getDate(), timeStart / 2, timeStart % 2 * 30),
-      timeEnd: new Date(date.getFullYear(), date.getMonth(), date.getDate(), timeEnd / 2, timeEnd % 2 * 30),
+      start: new Date(date.getFullYear(), date.getMonth(), date.getDate(), start / 2, start % 2 * 30),
+      end: new Date(date.getFullYear(), date.getMonth(), date.getDate(), end / 2, end % 2 * 30),
       title: '',
       place: '',
       contents: '',
@@ -64,16 +63,16 @@ class Day extends Component {
   handlePlanClick (data) {
     console.log(data);
     
-    const {day, startTime, endTime, title, place, contents} = data
+    const {day, start, end, title, place, contents, id} = data
     console.log(day);
     this.props.setRegisterSchedule({
       day : new Date(day),
-      timeStart: new Date(startTime),
-      timeEnd: new Date(endTime),
+      start: new Date(start),
+      end: new Date(end),
       title,
       place,
       contents,
-      isInitial: false
+      id
     })   
     this.setState({
       selectedItems: [],
@@ -87,7 +86,7 @@ class Day extends Component {
     const sunday = this.props.date.getDay() === 0
     const hours = []
     for (let i = 0; i < 24; i++) {
-      hours.push(<Hour selectableKey={i * 2} key={i * 10} selected={this.state.selectedItems.indexOf(i) > -1}
+      hours.push(<Hour selectableKey={i * 2} key={i} selected={this.state.selectedItems.indexOf(i) > -1}
         saturday={saturday} sunday={sunday}/>)
     }
     const classname = classNames(
@@ -99,22 +98,22 @@ class Day extends Component {
     )
     const plans = []
     const schedules = []
-    if (this.props.data[this.props.date]) {
-      for (let i = 0; i < this.props.data[this.props.date].length; i++) {
-        const planDay = new Date(this.props.data[this.props.date][i].day)
+    if (this.props.data.has(this.props.date.getTime())) {
+      for (let i = 0; i < this.props.data.get(this.props.date.getTime()).length; i++) {
+        const planDay = new Date(this.props.data.get(this.props.date.getTime())[i].day)
         if (planDay.getFullYear() !== this.props.date.getFullYear() || 
             planDay.getMonth() !== this.props.date.getMonth() || 
             planDay.getDate() !== this.props.date.getDate())
             continue
 
-        const planTimeStart = new Date(this.props.data[this.props.date][i].startTime)
-        const planTimeEnd = new Date(this.props.data[this.props.date][i].endTime)
-        const top = (((planTimeStart.getHours() * 60) + planTimeStart.getMinutes()) / 30) * 15
-        const height = ((((planTimeEnd.getHours() - planTimeStart.getHours()) * 60) + (planTimeEnd.getMinutes() - planTimeStart.getMinutes())) / 30) * 15
+        const planStart = new Date(this.props.data.get(this.props.date.getTime())[i].start)
+        const planEnd = new Date(this.props.data.get(this.props.date.getTime())[i].end)
+        const top = (((planStart.getHours() * 60) + planStart.getMinutes()) / 30) * 15
+        const height = ((((planEnd.getHours() - planStart.getHours()) * 60) + (planEnd.getMinutes() - planStart.getMinutes())) / 30) * 15
         schedules.push({
           top,
           height,
-          schedule: this.props.data[this.props.date][i]
+          schedule: this.props.data.get(this.props.date.getTime())[i]
         })
       }
       const groups = GetScheduleGroups(schedules) || []
@@ -122,7 +121,7 @@ class Day extends Component {
         plans.push(
           <div className="Plans" key={i}>
             {groups[i].map(data => {
-              return <Schedule key={i * data.top * data.height}
+              return <Schedule key={data.schedule.id}
                 top={data.top} height={data.height} data={data.schedule}
                 onPlanClick={this.handlePlanClick.bind(this)} />
             })

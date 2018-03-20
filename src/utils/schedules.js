@@ -18,9 +18,7 @@ export const GetScheduleGroups = schedules => {
       isGroup = false
     } else {
       if (isGroup === false) {
-        for (let j = 0; j < groups[i].length; j++) {
-          scheduleGroups.push(groups[j])
-        }
+        scheduleGroups.push(groups[i])
         isGroup = true
       } else {
         for (let j = 0; j < groups[i].length; j++) {

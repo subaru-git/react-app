@@ -5,6 +5,8 @@ import form from './form'
 import weeklyschedule from './weeklyschedule'
 import schedule from './schedule'
 import schedules from './schedules'
+import userprofile from './userprofile'
+import userlist from './userlist'
 
 export default {
   auth,
@@ -13,5 +15,7 @@ export default {
   form,
   weeklyschedule,
   schedule,
-  schedules
+  schedules,
+  userprofile,
+  userlist
 }

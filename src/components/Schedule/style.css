@@ -4,16 +4,76 @@
   margin-left: 1px;
   margin-right: 1px;
   flex-grow: 1;
+  pointer-events: all;
 }
 
 .PlanButton {
+  position: relative;
+}
+
+.TooltipList {
+  border: 1px solid black;
+  text-align: left;
+}
+
+.PlanData {
+  position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 15px 15px 1fr;
+  grid-gap: 0px;
+  /* grid-auto-rows: (5px, auto); */
+  text-align: center;
+  color: #212121;
+}
+
+.Tooltip{
+  margin: 0;
+  font-size: 2.0em;
 }
 
 .PlanTitle {
-  position: absolute;
-  top: 0;
+  font-size: .8em;
+  display: flex;
+  align-items: top;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  line-height: 1.2;
+  grid-column: 1 / 4;
+  grid-row: 1;
+  opacity: 0.9;
+}
+.PlanInfoTitle {
+  font-size: 1.3em;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  line-height: 1.2;
+  opacity: 1;
+  border-bottom: 0.5px dashed beige;
+}
+.PlanInfoSubHeader {
+  font-size: .5em;
+  text-align: left;
+  opacity: 0.5;
+}
+
+.PlanInfoPlace {
+  font-size: 1em;
+  text-align: left;
+  opacity: 0.9;
+}
+.PlanMember img{
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 0.em;
+  opacity: 0.8;
+}
+.PlanMembers {
+  text-align: left;
 }

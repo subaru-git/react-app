@@ -10,6 +10,7 @@ const cors = require('cors')
 const users = require('./api/woauth/users')
 const auth = require('./api/auth/auth')
 const schedule = require('./api/authed/schedule')
+const user = require('./api/authed/user')
 
 const app = express()
 
@@ -29,6 +30,6 @@ app.use(passport.session())
 
 app.use('/api', users)
 app.use(auth)
-app.use('/api', schedule)
-
+app.use('/api/schedule', schedule)
+app.use('/api/user', user)
 module.exports = app

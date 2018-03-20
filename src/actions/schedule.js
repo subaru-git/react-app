@@ -12,5 +12,13 @@ export default {
   getSchedule: payload => ({
     type: Types.GET_SCHEDULE,
     payload
+  }),
+  updateSchedule: payload => ({
+    type: Types.UPDATE_SCHEDULE,
+    payload
+  }),
+  deleteSchedule: payload => ({
+    type: Types.DELETE_SCHEDULE,
+    payload
   })
 }
